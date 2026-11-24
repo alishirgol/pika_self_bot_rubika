@@ -251,7 +251,7 @@ def main():
     except:import datetime as jdatetime
 
     # SESSION FOR ACCOUNT
-    try:client = Client("pikabot")
+    try:client = Client(session="bot")
     except:
         print('> I can not connect to the rubika.')
         return
