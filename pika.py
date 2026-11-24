@@ -251,11 +251,7 @@ def main():
     except:import datetime as jdatetime
 
     # SESSION FOR ACCOUNT
-    try:client = Client(
-        auth="bpzjvjjxnztrmkifsrvxnvgorntwyzdv",
-        private="-----BEGIN RSA PRIVATE KEY-----\nMIICXAIBAAKBgQDhrLSZbv0g8llHgf+0WtdQ3xBn0aU1FUxmUjpMu4Z+la5i2YBu\nxWfebAB4zS3L+DwvnptetNDGefYr2pBPcCavNT1ZdcFLX/c4J94Y9Mr++KqN4S+m\nuwhrrFiAbG5wIQbesWOEZgqqz4Y8YiycHiRZ3SUXXbbrlGtIqQ6fDmanowIDAQAB\nAoGASxd7lJ5wzfi2KmwgWLPtd3Rx8gm5TjuDC30K9yNi8lX+C9hRuwomsMUBNzEW\nrwsvg6zkCBRkb9Z/SkJUyIoJ5Jzjg8T1qntEvqvubifRPNJl9RG0ppRyGznMCa21\n8SOPkZeuzbyB6/FKwqZVM35bE+gAswaRhHwmZLC22PD1SAkCQQDn2DkwRG27KzNt\nEx+hP7DnqL8MXuAdYo5FDsgXzxm09t8QJBs2EDGNdZgNx6foaPnifc+ol4uU1sYV\n+EpfdDp1AkEA+S/qZNynWZqPsTBam4BzRdAxI/0utR5Zg1SGwhuouIY5R2PbTU6s\nu4wa92ihYdp7KqADW52JgzoDZqK/y6WmtwJAKcaTX3glEaHSLWhRvbt9Q/DrI+6A\nkartmdH1Ch0+M5Z8UStAX/iBBU1YLbt5LO6lgENNRMKx2wrsPI81z4dg9QJBALXj\nOMdonKr1+97NOcX5y6pw3f20B8zim1oWb8rt34jZSKQIioHyZHj9Oo3PDMVdcbva\nUrkj08U6qlLXhwICJx8CQFPh/bE6dUZZX4Xa1TAFEP7pVKLe5AYllSpBZzx/WtGD\nB/gqLIGyE23WW/MuqsIR1q+CHOc2TOKex9AtsKFLiEU=\n-----END RSA PRIVATE KEY-----",
-        platform="Android",
-    )
+    try:client = Client("pikabot")
     except:
         print('> I can not connect to the rubika.')
         return
