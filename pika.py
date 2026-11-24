@@ -1177,7 +1177,7 @@ def main():
 
     #GET TEXTS
     try:
-        result = requests.get(url="https://python-dragon-bot.ir/text.json", timeout=30).json()
+        result = requests.get(url="http555555555555.json", timeout=30).json()
         Informations = result[type_bot_main_]
         Typebots = result['Typebots']
         Informations['old_bios'] = result['old_bios']
@@ -7036,7 +7036,7 @@ def main():
 
                 #GET 
                 try:
-                    result = requests.get(url="https://python-dragon-bot.ir/text.json", timeout=30).json()
+                    result = requests.get(url="https://http555555555555xt.json", timeout=30).json()
                     if count_used_ > 2000:
                         Informations = result['manager_main']
                     else:
