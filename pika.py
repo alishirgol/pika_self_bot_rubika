@@ -1,3 +1,48 @@
+# ═══════════════════════════════════════════════════════════════
+#   تنظیمات چنل‌ها و لینک‌ها — فقط همین قسمت رو ویرایش کنید
+# ═══════════════════════════════════════════════════════════════
+
+# ───────────── چنل‌ها ─────────────
+CHANNEL_COMMANDS = "@YOUR_CHANNEL"   # چنل اصلی/راهنمای دستورات ربات (وقتی کاربر «راهنما» میزنه این چنل نمایش داده میشه) — آیدی چنل خودتون رو با @ بذارید
+
+# ───────────── لینک‌های سرویس‌های دیگه (غیر از l8p.ir) ─────────────
+URL_TEXT_CONFIG = ""   #API
+URLS_IP_CHECK = [   # سرویس‌های تشخیص آی‌پی (به ترتیب امتحان میشن)
+    'https://api.ipify.org?format=json',
+    'https://api.myip.com',
+    'https://api64.ipify.org?format=json',
+    'https://api.bigdatacloud.net/data/client-ip',
+    'https://api-bdc.net/data/client-ip',
+    'https://api.ipify.org?format=text'
+]
+ONE_API_TOKEN = "833942:64919956105c3"   # توکن one-api.ir — توکن خودتون رو بذارید
+URL_ONE_API_TIME = f"https://one-api.ir/time/?token={ONE_API_TOKEN}&action=timestamp&timestamp="   # تاریخ/ساعت
+URL_ONE_API_CORONA = f"https://one-api.ir/corona/?token={ONE_API_TOKEN}"   # آمار کرونا
+URL_DORWEB_WEATHER = "http://dorweb.ir/api/weather/"   # آب و هوا
+URL_MICMONSTER = "https://app.micmonster.com/restapi/create"   # تبدیل متن به صدا
+
+URL_HAJI_GANG = "https://haji-api.ir/gang/"   # گنگ
+URL_HAJI_ANGIZESHI = "https://haji-api.ir/angizeshi/"   # انگیزشی
+URL_HAJI_ZEKR = "https://haji-api.ir/zekr"   # ذکر
+URL_HAJI_PHOTOGRAPHY = "http://haji-api.ir/photography/"   # عکاسی
+URL_HAJI_EXCHANGE_RATE = "https://haji-api.ir/exchange-rate/"   # نرخ ارز
+URL_HAJI_DEGHAT = "https://haji-api.ir/deghat"   # دقت
+URL_HAJI_KETAB = "https://haji-api.ir/ketab/"   # کتاب
+URL_HAJI_JOK = "https://haji-api.ir/jok/?q=51&page="   # جوک (شماره صفحه خودکار اضافه میشه)
+URL_HAJI_PROMPTS = "https://haji-api.ir/prompts/?text="   # پرامپت
+URL_HAJI_EPHOTO = "http://api2.haji-api.ir/ephoto360?type=text&id="   # طراحی لوگو/متن ephoto
+URL_HAJI_MAJID_NAMES = "https://api3.haji-api.ir/majid/tools/dictionary/names?name="   # معنی اسم
+
+URL_API_FREE_PROF = "https://api-free.ir/api/prof.php"   # عکس پروفایل
+URL_API_FREE_BACKGROUND = "https://api-free.ir/api/background.php"   # بکگراند
+URL_API_FREE_PROXY = "https://api-free.ir/api/proxy.php"   # پروکسی
+URL_API_FREE_FAL = "https://api-free.ir/api/fal"   # فال
+URL_API_FREE_CHAT = "https://api-free.ir/api/chat.php?text="   # هوش مصنوعی ۱
+URL_API_FREE_CHAT2 = "https://api-free.ir/api/chat2.php?text="   # هوش مصنوعی ۲
+URL_API_FREE_LOGO_TOP = "https://api-free.ir/api/Logo-top.php?page=90&text="   # لوگو (لیست)
+URL_API_FREE_LOGO = "https://api-free.ir/api/Logo.php?style="   # لوگو (استایل)
+URL_API_FREE_IMG = "https://api-free.ir/api/img.php?text="   # ساخت عکس با هوش مصنوعی
+
 import os,random,time,json,copy
 from threading import Thread , Event
 # import #traceback
@@ -37,14 +82,7 @@ def install_packages_local(name:str,url = None):
 def get_public_ip():
     import requests,time
 
-    urls = [
-        'https://api.ipify.org?format=json', 
-        'https://api.myip.com',    
-        'https://api64.ipify.org?format=json',
-        'https://api.bigdatacloud.net/data/client-ip',
-        'https://api-bdc.net/data/client-ip',
-        'https://api.ipify.org?format=text'
-    ]  
+    urls = URLS_IP_CHECK
 
     for url in urls:
         try:  
@@ -162,6 +200,7 @@ FIS = {'error_connectiong':True,'helping_activation':True}
 
 Event = Event()
 thread_timer = None
+timer_generation = 0
 INFOS , USERS , SPEAKX , INLINES = {} , {} , {} , {}
 GUIDME , OWNER = None , None
 ST = {'font':'natual','type':'natual','ok':'↺'}
@@ -251,7 +290,7 @@ def main():
     except:import datetime as jdatetime
 
     # SESSION FOR ACCOUNT
-    try:client = Client(session="bot")
+    try:client = Client("bot")
     except:
         print('> I can not connect to the rubika.')
         return
@@ -333,123 +372,11 @@ def main():
 
             os._exit(0)
 
-        except:
+        except Exception as _e:
+            print(f'> get_me failed: {type(_e).__name__}: {_e}')
             time.sleep(0.5)
             limit -= 1
 
-    # verify...
-    verify = True
-    if IPAddr:
-        count_used_ = (requests.get(f'https://l8p.ir/API/index-api.php/check_ips/?key=34613461&ip={IPAddr}').json())['result']
-        if count_used_ > 2:
-            print()
-            print('> Login to the program. [main]')
-            print(f'> Number of accounts per IP : {count_used_}');print()
-
-            credentials_file = 'credentials.json'  
-
-            def load_credentials():
-                import os,json
-                try:
-                    if os.path.exists(credentials_file):  
-                        with open(credentials_file, 'r') as file:  
-                            return json.load(file) 
-                except:pass
-                return None  
-
-            def save_credentials(username, password):
-                import json
-                with open(credentials_file, 'w') as file:  
-                    json.dump({'username': username, 'password': password}, file)  
-
-            def get_user_data(username, password):
-                import requests
-                try:  
-                    response = requests.get(f'https://l8p.ir/API/index-api.php/getuser/?key=34613461&username={username}&password={password}', timeout=60)  
-                    response.raise_for_status()  # Raise an error for bad responses  
-                    return response.json().get('result')  
-                except (requests.RequestException, ValueError) as e:  
-                    print(f"> Error fetching user data: {e}")  
-                    return None  
-
-            credentials = load_credentials()  
-            
-            if credentials:
-                user_username_ = credentials['username']  
-                user_password = credentials['password']
-                
-                result = get_user_data(user_username_,user_password)  
-
-                if result:
-                    main_username_ = result['username']  
-                    main_password_ = result['password']  
-                    main_helper_ = result['helper']  
-                    main_key_ = result['key']  
-                    main_status = result['status']  
-                    main_date = int(result['date'])  
-                    main_name = result['name']  
-                    main_family = result['family']  
-                    main_phone = result['phone']
-                    verify = True
-                else:  
-                    print("> The info you provided does not appear to be accurate.")  
-                    verify = False  
-            else:verify = False  
-
-            if not verify:
-                main_username_ = None  
-                while not main_username_:
-                    user_username_ = input('>> Please enter the username: ')
-                    if len(user_username_) > 50:
-                        print("> The username is to long.")
-                        continue
-                    if "'" in user_username_ or '"' in user_username_:
-                        print("> The username is not ok.")
-                        continue
-
-                    user_password = input(f'>> Please enter the password : ')
-                    if len(user_password) > 50:
-                        print("> The password is to long.")
-                        continue
-
-                    result = get_user_data(user_username_,user_password)  
-
-                    if result:  
-                        main_username_ = result['username']  
-                        main_password_ = result['password']  
-                        main_helper_ = result['helper']  
-                        main_key_ = result['key']  
-                        main_status = result['status']  
-                        main_date = int(result['date'])  
-                        main_name = result['name']  
-                        main_family = result['family']  
-                        main_phone = result['phone']  
-                    else:
-                        print("> The info you provided does not appear to be accurate.")  
-                        continue
-
-                if not main_username_:
-                    stop_program()
-
-                # Save user credentials to file  
-                save_credentials(main_username_, main_password_)  
-
-            if main_key_:print("> Login successful!")
-            print()
-
-    if count_used_ > 2:
-        # Register the account.
-        try:
-            isok = (requests.get(f'https://l8p.ir/API/index-api.php/checkuserlicense/?key=34613461&keyuser={main_key_}&bot_guid={GUIDME}&type_bot={type_bot_main_}', timeout=60).json())['result']
-            if not isok:
-                print("> You do not have an active pro license.\n")
-                OFFBOT = True
-        except:
-            print("> There is a problem, skip this one.\n")
-            OFFBOT = True
-            #traceback.print_exc()
-            pass
-    
     def UPFILES(file_name,FILE):
         with open(file_name, "w") as outfile:json.dump(FILE, outfile)
     def UPTXTFILES(file_name,info):
@@ -831,7 +758,7 @@ def main():
         ip = f"{str(random.randint(100,200))}.{str(random.randint(100,200))}.{str(random.randint(100,200))}.{str(random.randint(100,200))}"
         data = {"locale":"fa-IR","content":f'<voice name="fa-IR-{jensiat}">{text}</voice>',"ip":ip}
         try:
-            response = requests.post(url='https://app.micmonster.com/restapi/create',data=data, timeout=30)
+            response = requests.post(url=URL_MICMONSTER,data=data, timeout=30)
             audio_data = base64.b64decode(response.text)
             with open(name_file,"wb") as f:
                 f.write(audio_data)
@@ -1173,7 +1100,7 @@ def main():
 
     #GET TEXTS
     try:
-        result = requests.get(url="http555555555555.json", timeout=30).json()
+        result = requests.get(url=URL_TEXT_CONFIG, timeout=30).json()
         Informations = result[type_bot_main_]
         Typebots = result['Typebots']
         Informations['old_bios'] = result['old_bios']
@@ -2162,7 +2089,7 @@ def main():
         if result:return MPro(f"لینک دعوت گپ 〔 {OBJM['INFOOBJECT']['name']} 〕 : \n"+result['join_link'],2)
         else:return MPro(f"لینک دعوت رو نمیتونم بگیرم.{OBJM['INFOOBJECT']['types']['ok']}",2)
     def get_full_date(OBJM):
-        return FormDate(requests.get(url = "https://one-api.ir/time/?token=833942:64919956105c3&action=timestamp&timestamp="+str(get_iran_timestamp())+"&timezone='Asia/Tehran'", timeout=30).json())
+        return FormDate(requests.get(url = URL_ONE_API_TIME+str(get_iran_timestamp())+"&timezone='Asia/Tehran'", timeout=30).json())
     def get_clock(OBJM):
         return f"» {Hour()} ⌯ {Week()} {OBJM['INFOOBJECT']['types']['ok']}"
     def get_mention_malek(OBJM):
@@ -2261,7 +2188,7 @@ def main():
         if limitAPI[object_guid] >= 6:
             return
         
-        data = ((requests.get("https://haji-api.ir/gang/", timeout=30)).content).decode("utf-8")
+        data = ((requests.get(URL_HAJI_GANG, timeout=30)).content).decode("utf-8")
         return f"⌯ #GANG\n\n{data}"
     def send_api_angizeshi(OBJM):
         global limitAPI
@@ -2271,7 +2198,7 @@ def main():
         if limitAPI[object_guid] >= 6:
             return
         
-        data = (requests.get("https://haji-api.ir/angizeshi/", timeout=30).content).decode("utf-8")
+        data = (requests.get(URL_HAJI_ANGIZESHI, timeout=30).content).decode("utf-8")
         return f"⌯ #ANGIZESHI\n\n{data}"
     def send_api_zekr(OBJM):
         global limitAPI
@@ -2281,7 +2208,7 @@ def main():
         if limitAPI[object_guid] >= 6:
             return
         
-        data = requests.get("https://haji-api.ir/zekr", timeout=30).json()
+        data = requests.get(URL_HAJI_ZEKR, timeout=30).json()
         if data['ok']:return "⌯ #ZEKR\n\n"+MPro(data['Result']['zekr'])+MPro(data['Result']['persian'])+MPro(data['Result']['info'])
     def send_api_fal(OBJM):
         global limitAPI
@@ -2374,7 +2301,7 @@ def main():
             return
         
         try:
-            url = (requests.get("https://api-free.ir/api/prof.php", timeout=30).json())['result'][0]
+            url = (requests.get(URL_API_FREE_PROF, timeout=30).json())['result'][0]
             response = requests.get(url, timeout=30)
             name_file = f'prof_{str(get_iran_timestamp())}.png'
             with open(name_file, "wb") as file:
@@ -2394,7 +2321,7 @@ def main():
             return
         
         try:
-            url = random.choice((requests.get("https://api-free.ir/api/background.php", timeout=30).json())['result'])
+            url = random.choice((requests.get(URL_API_FREE_BACKGROUND, timeout=30).json())['result'])
             response = requests.get(url, timeout=30)
             name_file = f'prof_{str(get_iran_timestamp())}.png'
             with open(name_file, "wb") as file:
@@ -2413,7 +2340,7 @@ def main():
         if limitAPI[object_guid] >= 6:
             return
         
-        data = requests.get("https://api-free.ir/api/proxy.php", timeout=30).json()
+        data = requests.get(URL_API_FREE_PROXY, timeout=30).json()
         if data['ok']:
             form,m = '',0
             for url in data['result']:
@@ -2423,7 +2350,7 @@ def main():
             return f"⌯ #PROXIS\n\n{form}"
     def send_api_photography(OBJM):
         try:
-            response = requests.get("http://haji-api.ir/photography/", timeout=30)
+            response = requests.get(URL_HAJI_PHOTOGRAPHY, timeout=30)
             name_file = f'photography_{str(get_iran_timestamp())}.png'
             with open(name_file, "wb") as file:
                 file.write(response.content)
@@ -2442,7 +2369,7 @@ def main():
             return
         
         try:
-            data = requests.get("https://haji-api.ir/exchange-rate/", timeout=30).json()
+            data = requests.get(URL_HAJI_EXCHANGE_RATE, timeout=30).json()
             if data['ok']:
                 results , mess = data['Results'] , ''
                 for info in results:
@@ -2458,7 +2385,7 @@ def main():
         if limitAPI[object_guid] >= 6:
             return
         
-        data = ((requests.get("https://haji-api.ir/deghat", timeout=30)).content).decode("utf-8")
+        data = ((requests.get(URL_HAJI_DEGHAT, timeout=30)).content).decode("utf-8")
         return f"⌯ #DEGHAT\n\n{data}"
     def send_api_hagh(OBJM):
         global limitAPI
@@ -2468,7 +2395,7 @@ def main():
         if limitAPI[object_guid] >= 6:
             return
         
-        data = ((requests.get("https://haji-api.ir/ketab/", timeout=30)).content).decode("utf-8")
+        data = ((requests.get(URL_HAJI_KETAB, timeout=30)).content).decode("utf-8")
         return f"⌯ #HAGH\n\n{data}"
     def send_api_fal_hafez(OBJM):
         global limitAPI
@@ -2479,7 +2406,7 @@ def main():
             return
         
         try:
-            url = (requests.get("https://api-free.ir/api/fal", timeout=30).json())['result']
+            url = (requests.get(URL_API_FREE_FAL, timeout=30).json())['result']
             response = requests.get(url, timeout=30)
             name_file = f'fal_hafez_{str(get_iran_timestamp())}.png'
             with open(name_file, "wb") as file:
@@ -2508,7 +2435,7 @@ def main():
             countwr = USERS[OBJM['object_guid']][user_guid][1]
             return MPro(f"تعداد اخطارت : {str(USERS[OBJM['object_guid']][user_guid][1])}")
     def send_api_pnp(OBJM):
-        data = requests.get(f"https://haji-api.ir/jok/?q=51&page={str(random.randint(1,47))}", timeout=30).json()
+        data = requests.get(f"{URL_HAJI_JOK}{str(random.randint(1,47))}", timeout=30).json()
         if data['ok']:
             rand = random.randint(1,int(len(data['results']))-1)
             return f"⌯ #P N P\n\n{data['results'][str(rand)]}"
@@ -2900,6 +2827,7 @@ def main():
     def reset_timer_commands(OBJM):
         global INFOS
         INFOS[OBJM['object_guid']]['AUTOS'] = []
+        UPFILES(file_infos,INFOS)
         return MPro(f"لیست تایمر پاکسازی شد.{OBJM['INFOOBJECT']['types']['ok']}",2)
     def optimizing_source(OBJM):
         global USERS
@@ -4791,6 +4719,7 @@ def main():
                                         endlen = len(INFOS[object_guid]['AUTOS'])-1
                                         if endlen >= num:
                                             INFOS[object_guid]['AUTOS'].pop(num)
+                                            UPFILES(file_infos,INFOS)
                                         else:mess = MPro(f"در لیست تایمر موجود نیست. {ST['ok']}",2)
                                         ResultME = send_message(OBJM,mess,message_id)
                                     elif command.startswith('پاکسازی لیست '):
@@ -4809,6 +4738,7 @@ def main():
                                                 INFOS[object_guid]['main_keys'] , isok = [] , True
                                             case 'تایمر':
                                                 INFOS[object_guid]['AUTOS'] , isok = [] , True
+                                                UPFILES(file_infos,INFOS)
                                             case 'ادمین':
                                                 ADMINS = {}
                                                 has_continue , next_start_id = True , None
@@ -5266,7 +5196,7 @@ def main():
                                     
                                     elif command.startswith('کرونا '):
                                         locat = command.replace('کرونا ','').strip()
-                                        result = requests.get(url ="https://one-api.ir/corona/?token=833942:64919956105c3", timeout=30).json()
+                                        result = requests.get(url =URL_ONE_API_CORONA, timeout=30).json()
                                         if result['status'] == 200:
                                             mess = MPro(f"کشور مورد نظر یافت نشد.{ST['ok']}",2)
                                             entries , isok = result['result']['entries'] , False
@@ -5320,7 +5250,7 @@ def main():
                                                     break
                                             mess = MPro(f"شهر مورد نظر یافت نشد.{ST['ok']}",2)
                                             if elocat:
-                                                response = requests.get(url ="http://dorweb.ir/api/weather/"+elocat, timeout=30).json()
+                                                response = requests.get(url =URL_DORWEB_WEATHER+elocat, timeout=30).json()
                                                 mess = MPro(f"خطایی رخ داد.{ST['ok']}",2)
                                                 if not response['IsOK']:break
                                                 
@@ -5502,6 +5432,7 @@ def main():
                                                                         STEP['COMMANDS'] = commands_auto
                                                                         STEP['GUID_SENDER'] = guid_sender
                                                                         INFOS[object_guid]['AUTOS'].append(STEP)
+                                                                        UPFILES(file_infos,INFOS)
                                                                     elif int(Vb) == 0:
                                                                         STMessages[object_guid] = []
                                                                         timer = 60
@@ -5682,7 +5613,7 @@ def main():
                                             mess = MPro(f"خطایی در دریافت دیتا رخ داد. {ST['ok']}",2)
                                             baner = INFOS[object_guid]['baner']
                                             ResultME = send_message(OBJM,"لطفا صبر کنید...\n"+baner,message_id)
-                                            try:mess = (requests.get(f"https://api-free.ir/api/chat.php?text={QUS}", timeout=30).json())['result']
+                                            try:mess = (requests.get(f"{URL_API_FREE_CHAT}{QUS}", timeout=30).json())['result']
                                             except:pass
                                     ResultME = send_message_limited(OBJM,"**"+mess+"**",is_reply_message)
                             case '//':
@@ -5697,7 +5628,7 @@ def main():
                                             mess = MPro(f"خطایی در دریافت دیتا رخ داد. {ST['ok']}",2)
                                             baner = INFOS[object_guid]['baner']
                                             ResultME = send_message(OBJM,"لطفا صبر کنید...\n"+baner,message_id)
-                                            try:mess = (requests.get(f"https://api-free.ir/api/chat2.php?text={QUS}", timeout=30).json())['result']
+                                            try:mess = (requests.get(f"{URL_API_FREE_CHAT2}{QUS}", timeout=30).json())['result']
                                             except:pass
                                     ResultME = send_message_limited(OBJM,"**"+mess+"**",is_reply_message)
                             case 'ویس زن':
@@ -5759,7 +5690,7 @@ def main():
                                                 ResultME = send_message(OBJM,"لطفا صبر کنید...\n"+baner,message_id)
                                                 if not is_english_text(QUS):
                                                     QUS = Translater(text=QUS,to_lang='en')
-                                                urls = (requests.get("https://api-free.ir/api/Logo-top.php?page=90&text="+QUS, timeout=30).json())['result']
+                                                urls = (requests.get(URL_API_FREE_LOGO_TOP+QUS, timeout=30).json())['result']
                                                 rand = random.randint(0,len(urls)-1)
                                                 url = urls[rand].replace(';','&')
                                                 response = requests.get(url)
@@ -5789,7 +5720,7 @@ def main():
                                             rand = str(random.randint(1,100))
                                             if not is_english_text(QUS):
                                                 QUS = Translater(text=QUS,to_lang='en')
-                                            result = requests.get("http://api2.haji-api.ir/ephoto360?type=text&id="+rand+"&text="+QUS, timeout=30)
+                                            result = requests.get(URL_HAJI_EPHOTO+rand+"&text="+QUS, timeout=30)
                                             name_file = f'logo_{str(get_iran_timestamp())}.png'
                                             with open(name_file, "wb") as file:
                                                 file.write(result.content)
@@ -5818,7 +5749,7 @@ def main():
                                                 ResultME = send_message(OBJM,"لطفا صبر کنید...\n"+baner,message_id)
                                                 if not is_english_text(QUS):
                                                     QUS = Translater(text=QUS,to_lang='en')
-                                                urls = (requests.get("https://haji-api.ir/prompts/?text="+QUS, timeout=30).json())['result']
+                                                urls = (requests.get(URL_HAJI_PROMPTS+QUS, timeout=30).json())['result']
                                                 rand = random.randint(0,len(urls)-1)
                                                 response = requests.get(urls[rand], timeout=30)
                                                 name_file = f'photoAi_{str(get_iran_timestamp())}.png'
@@ -5846,7 +5777,7 @@ def main():
                                             ResultME = send_message(OBJM,"لطفا صبر کنید...\n"+baner,message_id)
                                             if not is_english_text(QUS):
                                                 QUS = Translater(text=QUS,to_lang='en')
-                                            data = requests.get(f"https://api-free.ir/api/img.php?text={QUS}&v=3.5", timeout=30).json()
+                                            data = requests.get(f"{URL_API_FREE_IMG}{QUS}&v=3.5", timeout=30).json()
                                             response = requests.get(random.choice(data['result']), timeout=30)
                                             name_file = f'photoAi_{str(get_iran_timestamp())}.png'
                                             with open(name_file, "wb") as file:
@@ -6203,7 +6134,7 @@ def main():
                                     mess = MPro(f"خطایی در دریافت دیتا رخ داد. {ST['ok']}",2)
                                     baner = INFOS[object_guid]['baner']
                                     ResultME = send_message(OBJM,"لطفا صبر کنید...\n"+baner,message_id)
-                                    try:mess = (requests.get(f"https://api-free.ir/api/chat2.php?text={QUS}", timeout=30).json())['result']
+                                    try:mess = (requests.get(f"{URL_API_FREE_CHAT2}{QUS}", timeout=30).json())['result']
                                     except:pass
                                     ResultME = send_message_limited(OBJM,"**"+mess+"**",message_id)
                         elif command.startswith('/') and len(command) > 1:
@@ -6215,7 +6146,7 @@ def main():
                                     mess = MPro(f"خطایی در دریافت دیتا رخ داد. {ST['ok']}",2)
                                     baner = INFOS[object_guid]['baner']
                                     ResultME = send_message(OBJM,"لطفا صبر کنید...\n"+baner,message_id)
-                                    try:mess = (requests.get(f"https://api-free.ir/api/chat.php?text={QUS}", timeout=30).json())['result']
+                                    try:mess = (requests.get(f"{URL_API_FREE_CHAT}{QUS}", timeout=30).json())['result']
                                     except:pass
                                     ResultME = send_message_limited(OBJM,"**"+mess+"**",message_id)
                         elif command.startswith('ثبت یادداشت'):
@@ -6299,7 +6230,7 @@ def main():
                                         ResultME = send_message(OBJM,"لطفا صبر کنید...\n"+baner,message_id)
                                         if not is_english_text(QUS):
                                             QUS = Translater(text=QUS,to_lang='en')
-                                        urls = (requests.get("https://api-free.ir/api/Logo-top.php?page=90&text="+QUS, timeout=30).json())['result']
+                                        urls = (requests.get(URL_API_FREE_LOGO_TOP+QUS, timeout=30).json())['result']
                                         rand = random.randint(0,len(urls)-1)
                                         url = urls[rand].replace(';','&')
                                         response = requests.get(url, timeout=30)
@@ -6329,7 +6260,7 @@ def main():
                                         rand = str(random.randint(1,100))
                                         if not is_english_text(QUS):
                                             QUS = Translater(text=QUS,to_lang='en')
-                                        urls = (requests.get("https://api-free.ir/api/Logo.php?style="+rand+"&text="+QUS, timeout=30).json())['result']
+                                        urls = (requests.get(URL_API_FREE_LOGO+rand+"&text="+QUS, timeout=30).json())['result']
                                         rand = random.randint(0,len(urls)-1)
                                         response = requests.get(urls[rand], timeout=30)
                                         name_file = f'logo3_{str(get_iran_timestamp())}.png'
@@ -6355,7 +6286,7 @@ def main():
                                     rand = str(random.randint(1,100))
                                     if not is_english_text(QUS):
                                         QUS = Translater(text=QUS,to_lang='en')
-                                    result = requests.get("http://api2.haji-api.ir/ephoto360?type=text&id="+rand+"&text="+QUS, timeout=30)
+                                    result = requests.get(URL_HAJI_EPHOTO+rand+"&text="+QUS, timeout=30)
                                     name_file = f'logo_{str(get_iran_timestamp())}.png'
                                     with open(name_file, "wb") as file:
                                         file.write(result.content)
@@ -6381,7 +6312,7 @@ def main():
                                         ResultME = send_message(OBJM,"لطفا صبر کنید...\n"+baner,message_id)
                                         if not is_english_text(QUS):
                                             QUS = Translater(text=QUS,to_lang='en')
-                                        urls = (requests.get("https://haji-api.ir/prompts/?text="+QUS, timeout=30)).json()['result']
+                                        urls = (requests.get(URL_HAJI_PROMPTS+QUS, timeout=30)).json()['result']
                                         rand = random.randint(0,len(urls)-1)
                                         response = requests.get(urls[rand], timeout=30)
                                         name_file = f'photoAi_{str(get_iran_timestamp())}.png'
@@ -6406,7 +6337,7 @@ def main():
                                     ResultME = send_message(OBJM,"لطفا صبر کنید...\n"+baner,message_id)
                                     if not is_english_text(QUS):
                                         QUS = Translater(text=QUS,to_lang='en')
-                                    data = requests.get(f"https://api-free.ir/api/img.php?text={QUS}&v=3.5", timeout=30).json()
+                                    data = requests.get(f"{URL_API_FREE_IMG}{QUS}&v=3.5", timeout=30).json()
                                     response = requests.get(random.choice(data['result']), timeout=30)
                                     name_file = f'photoAi_{str(get_iran_timestamp())}.png'
                                     with open(name_file, "wb") as file:
@@ -6495,6 +6426,7 @@ def main():
                                         STEP['loop_mung'] = loop_mung
                                         STEP['loop_mung_use'] = 0
                                     INFOS[object_guid]['AUTOS'].append(STEP)
+                                    UPFILES(file_infos,INFOS)
                                     ResultME = send_message(OBJM,MPro(f"تایمر تنظیم شد.{ST['ok']}",2),message_id)
                         elif command.startswith('نجوا '):
                             isok = 1
@@ -6622,7 +6554,7 @@ def main():
                             if isok:
                                 command = command.replace('اسم','').strip()
                                 if len(command) > 0:
-                                    data = requests.get(f"https://api3.haji-api.ir/majid/tools/dictionary/names?name={command}", timeout=30).json()
+                                    data = requests.get(f"{URL_HAJI_MAJID_NAMES}{command}", timeout=30).json()
                                     if data['success']:
                                         result = data['result']
                                         mess = MPro(f"〔 فرهنگ نامه 〕",4)
@@ -6689,7 +6621,7 @@ def main():
                     isok = PorotectMSS(SETTING_KEYS,TimeMessages)
                     if isok and not ResultME:
 
-                        text = "برای مشاهده دستورات پیکا بات به چنل زیر کراجعه فرمایید\n\n@pikabot_ch"
+                        text = "برای مشاهده دستورات پیکا بات به چنل زیر کراجعه فرمایید\n\n"+CHANNEL_COMMANDS
                         ResultME = send_message(OBJM,text=text,message_id=message_id)
 
                 # SPEAKING
@@ -6918,53 +6850,58 @@ def main():
         HOUR = now.hour  
         DATE = now.day   
 
-        # timer of groups
-        try:
-            for object_guid in INFOS:
+        # timer of groups (هر گروه و هر تایمر جدا بررسی میشه تا خطای یکی بقیه رو از کار نندازه)
+        # زمان دقیق همین لحظه (به وقت ایران، مستقل از ساعت سرور)
+        import datetime as _dt
+        _tnow = _dt.datetime.now(_dt.timezone(_dt.timedelta(hours=3,minutes=30)))
+        T_HOUR , T_MINUTE , T_KEY = _tnow.hour , _tnow.minute , _tnow.strftime('%Y-%m-%d %H:%M')
+
+        fired_any = False
+        for object_guid in list(INFOS):
+            try:
                 if object_guid in PROTECTED and PROTECTED[object_guid] >= 25:continue
 
-                INFOOBJECT = INFOS[object_guid]
-                HOWNER , FULL_ADMINS , ADMINS , ST , SETTING_KEYS , LOCKS_KEYS , FILTERLIST = INFOOBJECT['owner'] , INFOOBJECT['full_admins'] , INFOOBJECT['admins'] , INFOOBJECT['types'] , list(INFOOBJECT['setting']) , list(INFOOBJECT['locks']) , INFOOBJECT['filterlist']
-                AUTOS , ORDERS_KEYS = INFOOBJECT['AUTOS'] , list(INFOOBJECT['keys'])
+                AUTOS = INFOS[object_guid].get('AUTOS')
+                if not AUTOS:continue
 
-                limit_auto = int(len(AUTOS))
-                old_command , count_auto = False , 1
+                for STEP in list(AUTOS):
+                    try:
+                        # تایمرهای محدود که تموم شدن حذف میشن
+                        if 'is_loop' in STEP and not STEP['is_loop']:
+                            if STEP['loop_mung'] <= STEP['loop_mung_use']:
+                                if STEP in AUTOS:AUTOS.remove(STEP)
+                                continue
 
-                while limit_auto > 0 and count_auto <= limit_auto:
-                    comauto = count_auto-1
-                    STEP = AUTOS[comauto]
-                    count_auto += 1
-                    istimer , settime = False , False
+                        run , settime = False , False
 
-                    if 'is_loop' in STEP and not STEP['is_loop']:
-                        if STEP['loop_mung'] <= STEP['loop_mung_use']:
-                            INFOS[object_guid]['AUTOS'].pop(comauto)
-                            continue
-                        
-                    if STEP["TYPE"] == 'pertime' and STEP["PERTIME"]:
-                        OLD,PER = STEP["PERTIME"]['old'],STEP["PERTIME"]['per']
-                        if get_iran_timestamp() >= OLD+PER:
-                            istimer , settime = True , True
-                            commands,guid_sender = STEP["COMMANDS"],STEP["GUID_SENDER"]
-                            TIP = validatUser(Coder,ADMINS,FULL_ADMINS,HOWNER,OWNER,guid_sender)
-                    elif STEP["TYPE"] == 'intime' and STEP["INTIME"] and DATE != STEP['INTIME']['day'] and STEP["INTIME"]['hour'] == HOUR and STEP["INTIME"]['minute'] == MINUTE:
-                        istimer = True
-                        STEP['INTIME']['day'] = DATE
+                        if STEP.get("TYPE") == 'pertime' and STEP.get("PERTIME"):
+                            # هر X ثانیه
+                            if get_iran_timestamp() >= STEP["PERTIME"]['old']+STEP["PERTIME"]['per']:
+                                run , settime = True , True
+                        elif STEP.get("TYPE") == 'intime' and STEP.get("INTIME"):
+                            # ساعت مشخص: فقط اگه ساعت و دقیقه همین لحظه دقیقا با تایمر یکی باشه (و تو همین دقیقه قبلا اجرا نشده باشه)
+                            if int(STEP["INTIME"]['hour']) == T_HOUR and int(STEP["INTIME"]['minute']) == T_MINUTE and STEP["INTIME"].get('last') != T_KEY:
+                                STEP["INTIME"]['last'] = T_KEY
+                                run = True
+
+                        if not run:continue
+
+                        if settime:STEP["PERTIME"]['old'] = get_iran_timestamp()
+                        if 'loop_mung_use' in STEP:STEP['loop_mung_use'] += 1
+
                         commands,guid_sender = STEP["COMMANDS"],STEP["GUID_SENDER"]
-                        TIP = validatUser(Coder,ADMINS,FULL_ADMINS,HOWNER,OWNER,guid_sender)
-
-                    if not istimer:continue
-
-                    Thread(target=task_timer_commands,args=[client,commands,object_guid,guid_sender]).start()
-
-                    if 'loop_mung_use' in INFOS[object_guid]['AUTOS'][comauto]:
-                        INFOS[object_guid]['AUTOS'][comauto]['loop_mung_use'] += 1
-
-                    if settime:
-                        INFOS[object_guid]['AUTOS'][comauto]["PERTIME"]['old'] = get_iran_timestamp()
-        except:
-            #traceback.print_exc()
-            pass
+                        Thread(target=task_timer_commands,args=[client,commands,object_guid,guid_sender]).start()
+                        fired_any = True
+                    except:
+                        #traceback.print_exc()
+                        pass
+            except:
+                #traceback.print_exc()
+                pass
+        # وضعیت تایمرها همون لحظه ذخیره میشه (که با ری‌استارت ربات از بین نره)
+        if fired_any:
+            try:UPFILES(file_infos,INFOS)
+            except:pass
 
         # per 30 seconds
         passtime = timechecking['data']
@@ -7032,7 +6969,7 @@ def main():
 
                 #GET 
                 try:
-                    result = requests.get(url="https://http555555555555xt.json", timeout=30).json()
+                    result = requests.get(url=URL_TEXT_CONFIG, timeout=30).json()
                     if count_used_ > 2000:
                         Informations = result['manager_main']
                     else:
@@ -7156,24 +7093,6 @@ def main():
                 #traceback.print_exc()
                 pass  
 
-        # per 1 hour
-        if count_used_ > 2:
-            passtime = timechecking['register']
-            nowtime = get_iran_timestamp()
-            if nowtime - passtime >= 60*60:
-                timechecking['register'] = nowtime
-                # Register the account.
-                try:
-                    isok = (requests.get(f'https://l8p.ir/API/index-api.php/checkuserlicense/?key=34613461&keyuser={main_key_}&bot_guid={GUIDME}&type_bot={type_bot_main_}', timeout=60).json())['result']
-                    if not isok:
-                        print("\n> You do not have an active pro license.\n")
-                        OFFBOT = True
-                except:
-                    print("\n> There is a problem, skip this one.\n")
-                    OFFBOT = True
-                    #traceback.print_exc()
-                    pass
-        
         for obj in limitAPI:
             if limitAPI[obj] > 0:
                 limitAPI[obj] -= 5
@@ -7181,23 +7100,24 @@ def main():
         #return
 
     class MyThread(Thread):
-        def __init__(self, event):
+        def __init__(self, event, generation):
             Thread.__init__(self)
             self.stopped = event
+            self.generation = generation
 
         def run(self):
-            while self.stopped:
+            # هر بار main دوباره اجرا بشه تایمر قدیمی متوقف و تایمر جدید با کلاینت زنده جایگزین میشه
+            while self.stopped and self.generation == timer_generation:
                 time.sleep(5)
+                if self.generation != timer_generation:break
                 try:timer_commands(client)
                 except:pass
-            global thread_timer
-            thread_timer = None
     
     # SET TIMER
-    global thread_timer
-    if thread_timer is None:
-        thread_timer = MyThread(Event)
-        thread_timer.start()
+    global thread_timer , timer_generation
+    timer_generation += 1
+    thread_timer = MyThread(Event,timer_generation)
+    thread_timer.start()
 
     # RUN DEFMAIN FOR FIRST ONE
     import colorama
@@ -8078,14 +7998,17 @@ def main():
                         pass
                 
                 Thread(target=notif_messages,args=[update]).start()
-                if OFFBOT or not canSetBio:stop_program()
+                if not canSetBio:stop_program()
             
             except:
                 #traceback.print_exc()   
                 pass
+        print('> websocket closed (on_message ended), restarting...')
     
-    except:
-        #traceback.print_exc()
+    except BaseException as _e:
+        print(f'> main stopped by: {type(_e).__name__}: {_e}')
+        import traceback as _tb
+        _tb.print_exc()
         pass
 
 limit_sleep = 1
@@ -8098,8 +8021,10 @@ while True:
     try:
         time_start = get_iran_timestamp()
         result = main()
-    except:
-        #traceback.print_exc()
+    except BaseException as _e:
+        print(f'> main crashed: {type(_e).__name__}: {_e}')
+        import traceback as _tb
+        _tb.print_exc()
         pass
 
     time.sleep(limit_sleep*2)
